@@ -1,3 +1,5 @@
 node_modules/
 qrcodes/
+qrcodes/*
+!qrcodes/.gitkeep
 .env
