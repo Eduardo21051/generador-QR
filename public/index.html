@@ -20,27 +20,4 @@
         <button id="btnDescarga" class="bg-red-500 text-white rounded-xl p-1 font-bold">Descargar</button>
     </div>
 </body>
-<script>
-    const formulario = document.getElementById('formularioQR');
-    const contenedorQR = document.getElementById('contenedorQR');
-
-    formulario.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const input = document.getElementById('inpQR');
-        const texto = input.value;
-
-        const res = await fetch('/api/generar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ texto })
-        });
-
-        const data = await res.json();
-
-        if (data.url) {
-            contenedorQR.innerHTML = `<img src="${data.url}" alt="QR generado">`;
-        }
-    });
-</script>
-
 </html>
