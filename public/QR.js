@@ -4,35 +4,29 @@ const btnDescarga = document.getElementById('btnDescarga');
 
 const QR = new QRCode(contenedorQR);
 
-formulario.addEventListener('submit', async (e) => {
+formulario.addEventListener('submit', (e) => {
     e.preventDefault();
-
     const input = document.getElementById('inpQR');
-    const texto = input.value;
+    QR.makeCode(input.value);
+});
 
-    if (!texto || texto.trim() === '') {
-        alert('Por favor escribe un texto o URL.');
+btnDescarga.addEventListener('click', () => {
+    const img = contenedorQR.querySelector('img');
+    const canvas = contenedorQR.querySelector('canvas');
+    console.log('clic')
+
+    let url = '';
+    if (img) {
+        url = img.src;
+    } else if (canvas) {
+        url = canvas.toDataURL('image/png'); 
+    } else {
+        alert('No hay código QR generado.');
         return;
     }
 
-    try {
-        const response = await fetch('/api/generar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ texto })
-        });
-
-        if (!response.ok) {
-            throw new Error('Error en la generación del QR');
-        }
-
-        const data = await response.json();
-
-        // Mostrar la imagen generada por el backend
-        contenedorQR.innerHTML = `<img src="${data.imagen}" alt="QR generado" />`;
-
-    } catch (err) {
-        console.error(err);
-        alert('Hubo un error al generar el código QR');
-    }
+    const enlace = document.createElement('a'); 
+    enlace.href = url;                          
+    enlace.download = 'codigo-qr.png';          
+    enlace.click();
 });
